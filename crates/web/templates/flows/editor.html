@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-heading">
+  <div><p class="eyebrow"><a href="/flows">Flows</a> / {% if is_edit %}Edit{% else %}New{% endif %}</p>
+  <h1>{% if is_edit %}Edit flow{% else %}Create flow{% endif %}</h1><p class="subtitle">One Oracle query, one weekly schedule, one webhook.</p></div>
+</div>
+<form id="flow-form" method="post" action="{{ action }}" {% if is_edit %}data-original-sql="{{ form.sql_query }}" data-original-keys="{{ form.key_columns }}"{% endif %}>
+  {% if let Some(id) = form.flow_id %}<input type="hidden" name="flow_id" value="{{ id }}">{% endif %}
+  <div class="form-layout">
+    <div class="form-main">
+      <section class="panel form-panel"><div class="panel-heading"><h2>01 · Query & detection</h2></div>
+        <label class="field"><span>Flow name</span><input name="name" value="{{ form.name }}" required></label>
+        <label class="toggle-line"><input type="checkbox" name="enabled" {% if form.enabled.is_some() %}checked{% endif %}><span>Enabled</span></label>
+        <label class="field"><span>Read-only Oracle SQL</span><textarea class="code-area" name="sql_query" rows="9" spellcheck="false" required>{{ form.sql_query }}</textarea></label>
+        <label class="field"><span>Row identity columns</span><input name="key_columns" value="{{ form.key_columns }}" required><small>Comma-separated names as returned by Oracle. Non-key columns are ignored.</small></label>
+        <label class="toggle-line"><input type="checkbox" name="trigger_on_first_run" {% if form.trigger_on_first_run.is_some() %}checked{% endif %}><span>Generate events from the first successful query</span></label>
+      </section>
+      <section class="panel form-panel"><div class="panel-heading"><h2>02 · Weekly schedule</h2></div>
+        <label class="field"><span>Day of week</span><select name="weekday">{% for day in weekdays %}<option value="{{ day.value }}" {% if day.selected %}selected{% endif %}>{{ day.name }}</option>{% endfor %}</select></label>
+        <div class="field-grid"><label class="field"><span>Start time</span><input type="time" name="start_time" value="{{ form.start_time }}" required></label><label class="field"><span>End time</span><input type="time" name="end_time" value="{{ form.end_time }}" required></label></div>
+        <div class="field-grid"><label class="field"><span>Timezone</span><input name="timezone" value="{{ form.timezone }}" required></label><label class="field"><span>Poll interval (seconds)</span><input type="number" name="poll_interval_seconds" value="{{ form.poll_interval_seconds }}" min="1" required></label></div>
+        <label class="toggle-line"><input type="checkbox" name="stop_after_detection" {% if form.stop_after_detection.is_some() %}checked{% endif %}><span>Stop polling after creating a webhook message</span></label>
+      </section>
+      <section class="panel form-panel"><div class="panel-heading"><h2>03 · Webhook</h2></div>
+        <label class="field"><span>Destination URL</span><input type="url" name="url" value="{{ form.url }}" required><small>Use HTTPS or an HTTP endpoint on literal loopback address.</small></label>
+        <label class="field"><span>HTTP headers (JSON object)</span><textarea class="code-area" name="headers" rows="4" spellcheck="false" required>{{ form.headers }}</textarea></label>
+        <label class="field"><span>Request body (JSON)</span><textarea class="code-area" name="payload_template" rows="6" spellcheck="false" required>{{ form.payload_template }}</textarea><small>V1 uses static JSON. Dynamic placeholders are reserved for a future version.</small></label>
+      </section>
+      {% if is_edit %}
+      <section class="panel form-panel"><div class="panel-heading"><h2>Detection state</h2></div>
+        <label class="toggle-line"><input type="checkbox" name="reset_baseline" {% if form.reset_baseline.is_some() %}checked{% endif %}><span>Reset baseline when saving</span></label>
+        <p class="muted">Changes to SQL or key columns can invalidate the existing baseline. Resetting is recommended.</p>
+      </section>
+      {% endif %}
+    </div>
+    <aside class="form-aside">
+      <section class="panel sticky-panel"><div class="panel-heading"><h2>Actions</h2></div>
+        <p class="muted">Test your SQL without changing detection state or creating webhook messages.</p>
+        <div class="stack-actions">
+          <button class="button button-primary" type="submit">Save flow</button>
+          <button class="button button-secondary" type="submit" formaction="/flows/test" formmethod="post" hx-post="/flows/test" hx-include="closest form" hx-target="#test-result" hx-swap="innerHTML" hx-indicator="#query-working">Test SQL</button>
+          <a class="button button-plain" href="/flows">Cancel</a>
+        </div>
+        <span class="htmx-indicator muted" id="query-working">Running the Oracle query…</span>
+      </section>
+      <section id="test-result" aria-live="polite">{% if let Some(report) = feedback %}{% include "partials/query_results.html" %}{% endif %}</section>
+    </aside>
+  </div>
+</form>
+{% endblock %}

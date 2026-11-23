@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">Execution history</p><h1>Runs</h1><p class="subtitle">Each Oracle poll, its outcome and any generated messages.</p></div></div>
+{% if let Some(id) = filter.flow_id %}<div class="filter-strip"><span>Filtered to flow <a href="/flows/{{ id }}">#{{ id }}</a></span><a href="/runs">Clear filter ×</a></div>{% endif %}
+<section class="panel"><div class="panel-heading"><h2>Execution history</h2></div>{% include "partials/runs_table.html" %}</section>
+{% include "partials/pagination.html" %}
+{% endblock %}

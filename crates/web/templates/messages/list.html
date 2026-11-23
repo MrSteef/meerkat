@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">Outgoing requests</p><h1>Webhook Messages</h1><p class="subtitle">Immutable requests and their current delivery state.</p></div></div>
+{% if filter.flow_id.is_some() || filter.run_id.is_some() || filter.status.is_some() %}
+<div class="filter-strip"><span>Filtered by
+{% if let Some(id) = filter.flow_id %} flow <a href="/flows/{{ id }}">#{{ id }}</a> {% endif %}
+{% if let Some(id) = filter.run_id %} run <a href="/runs/{{ id }}">#{{ id }}</a> {% endif %}
+{% if let Some(value) = filter.status %} status <strong>{{ value }}</strong> {% endif %}
+</span><a href="/messages">Clear filters ×</a></div>{% endif %}
+<section class="panel"><div class="panel-heading"><h2>Message history</h2></div>{% include "partials/messages_table.html" %}</section>
+{% include "partials/pagination.html" %}
+{% endblock %}

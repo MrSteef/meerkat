@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-heading">
+  <div><p class="eyebrow">Configuration</p><h1>Flows</h1><p class="subtitle">Monitor your WMS and trigger outgoing webhooks when new events appear.</p></div>
+  <a class="button button-primary" href="/flows/new">+ New flow</a>
+</div>
+<section class="panel">
+  <div class="panel-heading"><h2>Configured flows</h2><span class="pill pill-neutral">{{ flows.len() }} total</span></div>
+  <div class="table-scroll"><table>
+    <thead><tr><th>Flow</th><th>Weekly window</th><th>State</th><th>Last execution</th><th>Related records</th></tr></thead>
+    <tbody>
+    {% for flow in flows %}
+      <tr>
+        <td><a class="primary-link" href="/flows/{{ flow.id }}">{{ flow.name }}</a><div class="cell-subtle">Flow #{{ flow.id }}</div></td>
+        <td><span class="strong">{% match flow.weekday %}{% when 1 %}Mon{% when 2 %}Tue{% when 3 %}Wed{% when 4 %}Thu{% when 5 %}Fri{% when 6 %}Sat{% when 7 %}Sun{% else %}Day?{% endmatch %} {{ flow.start_time }}–{{ flow.end_time }}</span><div class="cell-subtle">Every {{ flow.poll_interval_seconds }} s · {{ flow.timezone }}</div></td>
+        <td>{% if flow.enabled != 0 %}<span class="pill pill-success">Enabled</span>{% else %}<span class="pill pill-neutral">Disabled</span>{% endif %}{% if flow.completed_window.is_some() %}<div class="cell-subtle">Last window completed</div>{% endif %}</td>
+        <td>{% match flow.last_run_started_at %}{% when Some with (last) %}{{ last }}{% when None %}<span class="cell-subtle">Never</span>{% endmatch %}<div class="cell-subtle">{% match flow.last_run_status %}{% when Some with (status) %}{{ status }}{% when None %}No executions{% endmatch %}</div></td>
+        <td class="table-actions"><a href="/runs?flow_id={{ flow.id }}">Runs</a><a href="/messages?flow_id={{ flow.id }}">Messages</a></td>
+      </tr>
+    {% else %}
+      <tr><td colspan="5"><div class="empty-state"><h3>No flows configured</h3><p>Create your first monitor to start checking the WMS.</p><a href="/flows/new" class="button button-primary">Create a flow</a></div></td></tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+</section>
+{% endblock %}

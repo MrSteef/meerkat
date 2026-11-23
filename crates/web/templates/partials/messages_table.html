@@ -1,0 +1,9 @@
+<div class="table-scroll"><table><thead><tr><th>Message</th><th>Origin</th><th>Created</th><th>Status</th><th>Attempts</th></tr></thead><tbody>
+  {% for item in messages %}
+    <tr><td><a class="primary-link code-link" href="/messages/{{ item.message.id }}">{{ item.message.id }}</a></td>
+      <td><a href="/flows/{{ item.message.flow_id }}">{{ item.message.flow_name }}</a><div class="cell-subtle"><a href="/runs/{{ item.message.run_id }}">Run #{{ item.message.run_id }}</a></div></td>
+      <td>{{ item.message.created_at }}</td>
+      <td><span class="pill pill-{{ item.status_class }}">{{ item.message.status }}</span></td>
+      <td><a href="/delivery-attempts?message_id={{ item.message.id }}">{{ item.message.attempt_count }} attempts</a></td></tr>
+  {% else %}<tr><td colspan="5" class="empty-cell">No webhook messages found.</td></tr>{% endfor %}
+</tbody></table></div>

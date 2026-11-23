@@ -1,0 +1,17 @@
+[package]
+name = "meerkat-oracle"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+meerkat-core.workspace = true
+async-trait.workspace = true
+chrono.workspace = true
+oracle.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+
+[lints]
+workspace = true

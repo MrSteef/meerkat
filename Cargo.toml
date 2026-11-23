@@ -1,0 +1,56 @@
+[workspace]
+resolver = "3"
+members = ["app", "crates/core", "crates/schedule", "crates/oracle", "crates/store", "crates/webhook", "crates/web"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.100"
+publish = false
+
+[workspace.dependencies]
+meerkat-core = { path = "crates/core" }
+meerkat-schedule = { path = "crates/schedule" }
+meerkat-oracle = { path = "crates/oracle" }
+meerkat-store = { path = "crates/store" }
+meerkat-webhook = { path = "crates/webhook" }
+meerkat-web = { path = "crates/web" }
+anyhow = "1.0"
+async-trait = "0.1.92"
+axum = { version = "0.8.9", features = ["form"] }
+chrono = { version = "0.4.45", features = ["serde"] }
+chrono-tz = { version = "0.10.4", features = ["serde"] }
+dotenvy = "0.15.7"
+askama = "0.16.1"
+oracle = { version = "0.6.3", features = ["chrono"] }
+reqwest = { version = "0.13.5", default-features = false, features = ["rustls"] }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+sqlparser = { version = "0.64.0", features = ["visitor"] }
+sqlx = { version = "0.9.1", default-features = false, features = ["runtime-tokio", "sqlite", "derive"] }
+thiserror = "2.0.21"
+tokio = { version = "1.54.1", features = ["rt-multi-thread", "macros", "signal", "time", "sync", "net"] }
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
+url = "2.5.8"
+uuid = { version = "1.29.3", features = ["v4"] }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+nursery = { level = "deny", priority = -1 }
+unwrap_used = "deny"
+expect_used = "deny"
+indexing_slicing = "deny"
+arithmetic_side_effects = "deny"
+unreachable = "deny"
+unimplemented = "deny"
+unchecked_time_subtraction = "deny"
+todo = "deny"
+string_slice = "deny"
+panic_in_result_fn = "deny"
+panic = "deny"
+exit = "deny"
+as_conversions = "deny"

@@ -1,0 +1,11 @@
+<section class="panel query-panel">
+  <div class="panel-heading"><h2>Query test</h2><span class="pill pill-neutral">No state changes</span></div>
+  {% if let Some(error) = report.error %}
+    <p class="alert alert-error">{{ error }}</p>
+  {% else %}
+    <p class="muted">{{ report.rows.len() }} preview rows{% if report.truncated %} (first 20 only){% endif %}.</p>
+    <div class="table-scroll"><table><thead><tr>{% for column in report.columns %}<th>{{ column }}</th>{% endfor %}</tr></thead><tbody>
+      {% for row in report.rows %}<tr>{% for value in row %}<td>{{ value }}</td>{% endfor %}</tr>{% else %}<tr><td colspan="99" class="muted">Query returned no rows.</td></tr>{% endfor %}
+    </tbody></table></div>
+  {% endif %}
+</section>

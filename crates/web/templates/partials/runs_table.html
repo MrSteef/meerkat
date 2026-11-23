@@ -1,0 +1,10 @@
+<div class="table-scroll"><table><thead><tr><th>Run</th><th>Flow</th><th>Started</th><th>Result</th><th>Rows</th><th>New keys</th><th>Messages</th></tr></thead><tbody>
+  {% for item in runs %}
+    <tr><td><a class="primary-link" href="/runs/{{ item.run.id }}">#{{ item.run.id }}</a></td>
+      <td><a href="/flows/{{ item.run.flow_id }}">{{ item.run.flow_name }}</a></td>
+      <td>{{ item.run.started_at }}</td>
+      <td><span class="pill pill-{{ item.status_class }}">{{ item.run.status }}</span></td>
+      <td>{{ item.row_count }}</td><td>{{ item.new_key_count }}</td>
+      <td><a href="/messages?run_id={{ item.run.id }}">{{ item.message_count }} messages</a></td></tr>
+  {% else %}<tr><td colspan="7" class="empty-cell">No runs found.</td></tr>{% endfor %}
+</tbody></table></div>

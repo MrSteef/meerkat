@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">HTTP history</p><h1>Delivery Attempts</h1><p class="subtitle">Individual requests, response codes, timeouts and errors.</p></div></div>
+{% if filter.flow_id.is_some() || filter.message_id.is_some() %}<div class="filter-strip"><span>Filtered by
+{% if let Some(id) = filter.flow_id %} flow <a href="/flows/{{ id }}">#{{ id }}</a>{% endif %}
+{% if let Some(id) = filter.message_id %} message <a href="/messages/{{ id }}">{{ id }}</a>{% endif %}
+</span><a href="/delivery-attempts">Clear filters ×</a></div>{% endif %}
+<section class="panel"><div class="panel-heading"><h2>HTTP request history</h2></div>{% include "partials/attempts_table.html" %}</section>
+{% include "partials/pagination.html" %}
+{% endblock %}

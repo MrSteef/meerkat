@@ -1,0 +1,30 @@
+[package]
+name = "meerkat"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+meerkat-core.workspace = true
+meerkat-schedule.workspace = true
+meerkat-oracle.workspace = true
+meerkat-store.workspace = true
+meerkat-webhook.workspace = true
+meerkat-web.workspace = true
+anyhow.workspace = true
+axum.workspace = true
+chrono.workspace = true
+dotenvy.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+uuid.workspace = true
+
+[dev-dependencies]
+async-trait.workspace = true
+serde_json.workspace = true
+
+[lints]
+workspace = true

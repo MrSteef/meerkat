@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow"><a href="/runs?flow_id={{ run.run.flow_id }}">Runs</a> / #{{ run.run.id }}</p><h1>Run #{{ run.run.id }}</h1><p class="subtitle">Oracle execution and resulting webhook messages.</p></div><span class="pill pill-{{ run.status_class }}">{{ run.run.status }}</span></div>
+<div class="summary-grid"><div class="metric"><span class="metric-label">Rows returned</span><strong>{{ run.row_count }}</strong></div><div class="metric"><span class="metric-label">New keys</span><strong>{{ run.new_key_count }}</strong></div><div class="metric"><span class="metric-label">Generated messages</span><a class="metric-value-link" href="/messages?run_id={{ run.run.id }}">{{ run.message_count }}</a></div></div>
+<section class="panel"><div class="panel-heading"><h2>Execution details</h2></div><dl class="properties"><div><dt>Flow</dt><dd><a href="/flows/{{ run.run.flow_id }}">{{ run.run.flow_name }}</a></dd></div><div><dt>Started</dt><dd>{{ run.run.started_at }}</dd></div><div><dt>Finished</dt><dd>{% match run.run.finished_at %}{% when Some with (time) %}{{ time }}{% when None %}—{% endmatch %}</dd></div></dl>{% if let Some(error) = run.run.error %}<h3>Execution error</h3><pre class="code-block error-code">{{ error }}</pre>{% endif %}</section>
+<section class="panel"><div class="panel-heading"><h2>Generated webhook messages</h2><a href="/messages?run_id={{ run.run.id }}">View all →</a></div>{% include "partials/messages_table.html" %}</section>
+{% endblock %}

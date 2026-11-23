@@ -1,0 +1,13 @@
+[package]
+name = "meerkat-schedule"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+chrono.workspace = true
+chrono-tz.workspace = true
+
+[lints]
+workspace = true
